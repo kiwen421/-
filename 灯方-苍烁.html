@@ -1,0 +1,238 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+<title>灯方-苍烁</title>  
+<audio id="soundEffect" src="亮灯音效.mp3"></audio>
+<style>  
+  /* 加载界面的样式 */  
+  .loader {  
+    position: fixed; /* 固定定位 */  
+    top: 0;  
+    left: 0;  
+    width: 100%;  
+    height: 100%;  
+    background-color: rgb(255, 255, 255); /* 黑色背景 */  
+    display: flex;  
+    justify-content: center; /* 水平居中 */  
+    align-items: center; /* 垂直居中 */  
+    color: #00eeff; /* 文字颜色 */  
+    font-size: 30px; /* 文字大小 */  
+    text-align: center;
+    z-index: 9999; /* 确保加载界面位于最顶层 */  
+    animation: fadeOut 1s ease-out 0.5s forwards;
+  }  
+  @keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+  /* 主内容样式，用于在加载完成后显示 */  
+  .container {  
+    display: none; /* 初始时隐藏主内容 */  
+  }  
+</style>  
+<div class="loader">使用左键或右键调整颜色<br>左右键调整方向相反</div>  
+<style>
+  body {  
+    background-color: rgb(255, 255, 255);  
+    position: relative;
+    display: flex;  
+    justify-content: center;  
+    align-items: center;  
+    height: 100vh;  
+    margin: 0;  
+  } 
+  .button {  
+    position: static;
+    width: 20px;  
+    height: 20px;  
+    background-color: rgb(255, 255, 255);  
+    border: 1px solid rgb(250, 250, 250); 
+    border-radius: 0;  
+    outline: none;  
+    cursor: pointer; 
+    display: grid; 
+    justify-content: center;  
+    align-items: center;  
+    color: white; /* 设置按钮内文本颜色 */  
+    transition: background-color 0.2s, opacity 0.2s;  
+    font-size: 5px; /* 设置文本大小 */  
+  }  
+  
+  .container {  
+    display: grid;  
+    grid-template-columns: repeat(100, 20px); /* 100px 无间隔 */  
+    grid-template-rows: repeat(100, 20px); /* 同上 */  
+    gap: 0;
+    overflow: auto; /* 允许滚动 */
+    width: 100%; /* 宽度设为100% */
+    height: 100%; 
+  }  
+  .button.color-red {
+     background-color: #ff0000; 
+     opacity: 1;  
+  }
+  .button.color-green { 
+    background-color: #00ff00; 
+    opacity: 1;  
+  }
+  .button.color-blue { 
+    background-color: #0000ff; 
+    opacity: 1;  
+  }
+  .button.color-yellow { 
+    background-color: #fafa00; 
+    opacity: 1;  
+  }
+  .button.color-purple { 
+    background-color: #ee00ff; 
+    opacity: 1;  
+  }
+  .button.color-cyan { 
+    background-color: #00eeff; 
+    opacity: 1;  
+  }
+  .button.color-white { 
+    background-color: #ffffff; 
+    opacity: 1;  
+  }
+  .button.color-black { 
+    background-color: #000000; 
+    opacity: 1;  
+  }
+    .button:hover(.color-white) {  
+        /* 只有当按钮不是active时，鼠标悬停才变为半透明明黄色 */  
+        background-color: #999999;  
+        opacity: 0.5;  
+    }  
+    #open-btn {  
+        position: fixed;  
+        bottom: 40px;  
+        right: 50px;  
+        padding: 5px 20px;    
+        color: rgb(255, 255, 255);    
+        background-color: #000000;    
+        border: 1px solid rgb(255, 255, 255);  
+        border-radius: 5px;    
+        cursor: pointer;    
+        outline: none;    
+        transition: background-color 0.3s, color 0.3s; /* 添加过渡效果，使颜色变化更平滑 */  
+    }  
+  #open-btn:hover {    
+        background-color: #fafa00;  /* 修改背景色为明黄色 */    
+        color: rgb(0, 0, 0);  /* 保持文本颜色为黑色 */ 
+    }
+  #opencm-btn {  
+        position: fixed;  
+        bottom: 40px;  
+        right: 130px;  
+        padding: 5px 20px;    
+        color: rgb(0, 0, 0);    
+        background-color: #ffffff;    
+        border: 1px solid rgb(0, 0, 0);  
+        border-radius: 5px;    
+        cursor: pointer;    
+        outline: none;    
+        transition: background-color 0.3s, color 0.3s; /* 添加过渡效果，使颜色变化更平滑 */  
+    }  
+  #opencm-btn:hover {    
+        background-color: #000000;  /* 修改背景色为明黄色 */    
+        color: rgb(255, 255, 255);  /* 保持文本颜色为黑色 */ 
+    } 
+</style> 
+<body>  
+  <div class="container">  
+    <!-- 使用JavaScript动态生成按钮，以简化HTML代码 -->  
+    <script>  
+      function createButtons(numButtons) {  
+      const container = document.querySelector('.container');  
+      var audio = document.getElementById('soundEffect');
+      const colors = ['color-black','color-red', 'color-green', 'color-blue', 'color-yellow', 'color-purple','color-cyan', 'color-white'];
+      for (let i = 0; i < numButtons; i++) {  
+        const button = document.createElement('button');
+        button.classList.add('button', 'color-white');   
+        //button.textContent = i.toString(); // 设置按钮的文本为编号 (调试/编辑用) -------------------------------------------
+        button.dataset.index = i; // 将索引存储在data-index属性中以便后续引用  
+        button.addEventListener('click', function() {
+      // 点击时播放音效
+         audio.pause(); // 暂停音频
+         audio.currentTime = 0; // 重置播放位置到开始
+         audio.play();
+         let currentColorIndex = colors.indexOf(button.className.split(' ')[1]); // 获取当前颜色的索引
+        if (currentColorIndex === -1) {
+         // 如果按钮没有颜色类，则默认为黑色
+         currentColorIndex = 7;
+        }
+        const nextColorIndex = (currentColorIndex + 1) % colors.length; // 计算下一个颜色的索引
+        button.classList.remove(colors[currentColorIndex]); // 移除当前颜色类
+        button.classList.add(colors[nextColorIndex]); // 添加下一个颜色类
+         });
+         button.addEventListener('contextmenu', function(event) {
+        // 阻止默认行为
+          event.preventDefault();
+          // 自定义逻辑
+          let currentColorIndex = colors.indexOf(button.className.split(' ')[1]); // 获取当前颜色的索引
+          if (currentColorIndex === -1) {
+          // 如果按钮没有颜色类，则默认为黑色
+           currentColorIndex = 7;
+          }
+          const nextColorIndex = (currentColorIndex + 7) % colors.length; // 计算下一个颜色的索引
+          button.classList.remove(colors[currentColorIndex]); // 移除当前颜色类
+          button.classList.add(colors[nextColorIndex]); // 添加下一个颜色类
+        });
+        container.appendChild(button);  
+      } 
+    }  
+    function lightenButton(index,nextColorIndex) {  
+      const colors = ['color-black','color-red', 'color-green', 'color-blue', 'color-yellow', 'color-purple','color-cyan', 'color-white'];
+      const buttons = document.querySelectorAll('.button');  
+      if (index >= 0 && index < buttons.length) {  
+        let currentColorIndex = colors.indexOf(buttons[index].className.split(' ')[1]); // 获取当前颜色的索引
+          if (currentColorIndex === -1) {
+          // 如果按钮没有颜色类，则默认为黑色
+           currentColorIndex = 7;
+          }
+          buttons[index].classList.remove(colors[currentColorIndex]); // 移除当前颜色类
+          buttons[index].classList.add(colors[nextColorIndex]); // 添加下一个颜色类
+      }  
+    }
+    createButtons(10000); // 创建按钮   
+    lightenButton(101,0);
+    lightenButton(201,1);
+    lightenButton(301,2);
+    lightenButton(401,3);
+    lightenButton(302,4);
+    lightenButton(203,5);
+    lightenButton(403,6);
+    lightenButton(205,6);
+    lightenButton(305,5);
+    lightenButton(406,4);
+    lightenButton(307,3);
+    lightenButton(408,2);
+    lightenButton(309,1);
+    lightenButton(209,0);
+    </script>  
+  </div>  
+</body>  
+<button id="open-btn">灯方</button>  
+<button id="opencm-btn">苍墨</button>  
+<script>  
+  document.getElementById('open-btn').addEventListener('click', function() {  
+        window.location.href = '灯方.html'; 
+    });
+  document.getElementById('opencm-btn').addEventListener('click', function() {  
+        window.location.href = '灯方-苍墨.html'; 
+    });
+  // 假设这里模拟一个异步加载过程，比如从服务器获取数据  
+  setTimeout(function() {  
+    // 移除加载界面  
+    var loader = document.querySelector('.loader');  
+    loader.style.display = 'none'; // 或者使用 loader.remove(); 但这会从DOM中移除元素  
+  
+    // 显示主内容  
+    var mainContent = document.querySelector('.container');   
+  }, 1000);
+</script>  
+</head>  
+</html>

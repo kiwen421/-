@@ -1,0 +1,194 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+<title>灯方</title>  
+<audio id="soundEffect" src="亮灯音效.mp3"></audio>
+<style>  
+  /* 加载界面的样式 */  
+  .loader {  
+    position: fixed; /* 固定定位 */  
+    top: 0;  
+    left: 0;  
+    width: 100%;  
+    height: 100%;  
+    background-color: black; /* 黑色背景 */  
+    display: flex;  
+    justify-content: center; /* 水平居中 */  
+    align-items: center; /* 垂直居中 */  
+    color: white; /* 文字颜色 */  
+    font-size: 30px; /* 文字大小 */  
+    z-index: 9999; /* 确保加载界面位于最顶层 */  
+    animation: fadeOut 1s ease-out 0.5s forwards;
+  }  
+  @keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+  /* 主内容样式，用于在加载完成后显示 */  
+  .container {  
+    display: none; /* 初始时隐藏主内容 */  
+  }  
+</style>  
+<div class="loader">加载中……</div>  
+<style>
+  body {  
+    background-color: black;  
+    position: relative;
+    display: flex;  
+    justify-content: center;  
+    align-items: center;  
+    height: 100vh;  
+    margin: 0;  
+  } 
+  .button {  
+    width: 100px;  
+    height: 100px;  
+    background-color: black;  
+    border: 1px solid white; 
+    border-radius: 0;  
+    outline: none;  
+    cursor: pointer; 
+    display: grid; 
+    justify-content: center;  
+    align-items: center;  
+    color: white; /* 设置按钮内文本颜色 */  
+    transition: background-color 0.2s, opacity 0.2s;  
+    font-size: 20px; /* 设置文本大小 */  
+  }  
+  .container {  
+    display: grid;  
+    grid-template-columns: repeat(100, 100px); /* 100px 无间隔 */  
+    grid-template-rows: repeat(100, 100px); /* 同上 */  
+    gap: 0;
+    overflow: auto; /* 允许滚动 */
+    width: 100%; /* 宽度设为100% */
+    height: 100%; 
+  }  
+  .button.active {  
+        background-color: #ffff00; /* 明黄色 */  
+        opacity: 1; 
+        color: black;
+    }  
+    .button:hover:not(.active) {  
+        /* 只有当按钮不是active时，鼠标悬停才变为半透明明黄色 */  
+        background-color: #ffff00;  
+        opacity: 0.5;  
+        color: black;
+    }  
+</style> 
+<body>  
+  <div class="container">  
+    <!-- 使用JavaScript动态生成按钮，以简化HTML代码 -->  
+    <script>  
+      function createButtons(numButtons) {  
+      const container = document.querySelector('.container');  
+      var audio = document.getElementById('soundEffect');
+      for (let i = 0; i < numButtons; i++) {  
+        const button = document.createElement('button');   
+        button.classList.add('button');  
+        //button.textContent = i.toString(); // 设置按钮的文本为编号 (调试/编辑用) -------------------------------------------
+        button.dataset.index = i; // 将索引存储在data-index属性中以便后续引用  
+        button.addEventListener('click', function() {
+      // 点击时播放音效
+         audio.pause(); // 暂停音频
+         audio.currentTime = 0; // 重置播放位置到开始
+         audio.play();
+      });
+        button.addEventListener('click', function() {  
+          this.classList.toggle('active');  
+        }
+      );  
+        container.appendChild(button);  
+      }  
+    }  
+    //****************************************************************************设置段
+    function setTextOnButton(index, text) {  
+      const buttons = document.querySelectorAll('.button');  
+      if (index >= 0 && index < buttons.length) {  
+        buttons[index].textContent = text; // 设置指定编号按钮的文本  
+      }  
+    }
+    function setNbTextOnButton(index, text,color,weight) {  
+      const buttons = document.querySelectorAll('.button');  
+      if (index >= 0 && index < buttons.length) {  
+        buttons[index].textContent = text; // 设置指定编号按钮的文本  
+        buttons[index].style.color = color;  
+  
+        // 设置字体粗细（权重）  
+        // 注意：'normal', 'bold', 'bolder', 'lighter', '100', '200', ..., '900' 是有效的值  
+        // 如果传入的 weight 不是有效的CSS值，则使用默认值 'normal'  
+        if (['normal', 'bold', 'bolder', 'lighter'].includes(weight) || /^\d{1,3}$/.test(weight) && parseInt(weight, 10) >= 100 && parseInt(weight, 10) <= 900) {  
+            buttons[index].style.fontWeight = weight;  
+        } else {  
+            // 如果不是有效的CSS值，则默认设置为 'normal'  
+            buttons[index].style.fontWeight = 'normal';  
+        }  
+      }  
+    }
+    function lightenButton(index) {  
+      const buttons = document.querySelectorAll('.button');  
+      if (index >= 0 && index < buttons.length) {  
+        buttons[index].classList.toggle('active');
+      }  
+    }
+    function setButtonRedirect(index, targetUrl) {  
+    const buttons = document.querySelectorAll('.button');  
+    if (index >= 0 && index < buttons.length) {  
+        // 为指定索引的按钮添加点击事件监听器  
+        buttons[index].addEventListener('click', function() {  
+            // 跳转到指定的URL  
+            setTimeout(function() {  
+            // 这里写你想要延迟执行的代码  
+            window.location.href = targetUrl; 
+            }, 200); 
+        });  
+    }  
+    }
+    //***************************************************************************设置段
+    createButtons(10000); // 创建按钮   
+    lightenButton(0) ;
+    lightenButton(2) ;
+    lightenButton(3) ;
+    lightenButton(4) ;
+    lightenButton(5) ;
+    lightenButton(7) ;
+    lightenButton(8) ;
+    lightenButton(9) ;
+    lightenButton(10) ;
+    setTextOnButton(2, '魁');
+    setTextOnButton(3, '雯');
+    setTextOnButton(4, '出');
+    setTextOnButton(5, '品');
+    setTextOnButton(7, '必');
+    setTextOnButton(8, '属');
+    setTextOnButton(9, '精');
+    setTextOnButton(10, '品');
+    setTextOnButton(0, '灯方'); // 注意索引是从0开始的，所以5是索引4  
+    setTextOnButton(101, '迷霓');
+    setButtonRedirect(101, '灯方-迷霓.html');
+    setTextOnButton(202, '点灯谜题');
+    setButtonRedirect(202, '谜题灯方-点灯.html');
+    setTextOnButton(102, '灯小方');
+    setButtonRedirect(102, '灯小方.html');
+    setTextOnButton(103, '苍墨');
+    setButtonRedirect(103, '灯方-苍墨.html');
+    setTextOnButton(104, '苍烁');
+    setButtonRedirect(104, '灯方-苍烁.html');
+    </script>  
+  </div>  
+</body>  
+<script>  
+  // 假设这里模拟一个异步加载过程，比如从服务器获取数据  
+  setTimeout(function() {  
+    // 移除加载界面  
+    var loader = document.querySelector('.loader');  
+    loader.style.display = 'none'; // 或者使用 loader.remove(); 但这会从DOM中移除元素  
+  
+    // 显示主内容  
+    var mainContent = document.querySelector('.container');   
+  }, 1000);
+</script>  
+</head>  
+</html>

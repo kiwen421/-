@@ -1,0 +1,124 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+<title>谜题灯方-点灯</title>  
+<style>  
+  body {  
+    background-color: black;  
+    display: flex;  
+    flex-direction: column;  
+    align-items: center;  
+    justify-content: center;  
+    height: 100vh;  
+    margin: 0;  
+  }  
+  
+  .container {  
+    display: grid;  
+    grid-template-columns: repeat(3, 100px); 
+    grid-template-rows: repeat(3, 100px);  
+    gap: 0;  
+  }  
+  
+  .button {  
+    width: 100px;  
+    height: 100px;  
+    border: 1px solid white;  
+    background-color: black;  
+    border-radius: 0;  
+    outline: none;  
+    cursor: pointer;  
+    transition: background-color 0.3s;  
+  }  
+  
+  .button.active {  
+    background-color: #ffff00;  
+  }  
+  
+  #open-btn {  
+        position: relative;  
+        bottom: 40px;     
+        left:50px;
+        padding: 10px 20px;    
+        color: white;    
+        background-color: #000000;    
+        border: 1px solid white;  
+        border-radius: 5px;    
+        cursor: pointer;    
+        outline: none;    
+        transition: background-color 0.3s, color 0.3s; /* 添加过渡效果，使颜色变化更平滑 */  
+    }   
+  #reset-btn {   
+        margin-right: 100px; /* 向右移动10px */ 
+        margin-top: 20px;    
+        padding: 10px 20px;    
+        color: white;    
+        background-color: #000000;    
+        border: 1px solid white;  
+        border-radius: 5px;    
+        cursor: pointer;    
+        outline: none;    
+        transition: background-color 0.3s, color 0.3s; /* 添加过渡效果，使颜色变化更平滑 */  
+    }   
+      
+    #reset-btn:hover{
+      background-color: #ffff00;  /* 修改背景色为明黄色 */    
+        color: black;  /* 保持文本颜色为黑色 */ 
+    }
+    #open-btn:hover {    
+        background-color: #ffff00;  /* 修改背景色为明黄色 */    
+        color: black;  /* 保持文本颜色为黑色 */ 
+    } 
+</style>  
+</head>  
+<body>  
+<div class="container">  
+  <button class="button" id="btn1" onclick="toggleButton(this, 0, 0)"></button>  
+  <button class="button" id="btn2" onclick="toggleButton(this, 0, 1)"></button>  
+  <button class="button" id="btn3" onclick="toggleButton(this, 0, 2)"></button>  
+  <button class="button" id="btn4" onclick="toggleButton(this, 1, 0)"></button>  
+  <button class="button active" id="btn5" onclick="toggleButton(this, 1, 1)"></button> <!-- Initial active state -->  
+  <button class="button" id="btn6" onclick="toggleButton(this, 1, 2)"></button>  
+  <button class="button" id="btn7" onclick="toggleButton(this, 2, 0)"></button>  
+  <button class="button" id="btn8" onclick="toggleButton(this, 2, 1)"></button>  
+  <button class="button" id="btn9" onclick="toggleButton(this, 2, 2)"></button>  
+</div>  
+<button id="reset-btn" onclick="resetButtons()">重置</button>  
+<button id="open-btn">灯方</button>  
+<script>  
+document.getElementById('open-btn').addEventListener('click', function() {  
+        window.location.href = '灯方.html'; 
+    });
+function toggleButton(btn, row, col) {  
+  // Toggle current button  
+  btn.classList.toggle('active');  
+  
+  // Toggle adjacent buttons  
+  const neighbors = [  
+    [-1, 0], [1, 0], // Up and down  
+    [0, -1], [0, 1]  // Left and right  
+  ];  
+  
+  neighbors.forEach(([dr, dc]) => {  
+    const newRow = row + dr;  
+    const newCol = col + dc;  
+    if (newRow >= 0 && newRow < 3 && newCol >= 0 && newCol < 3) {  
+      const id = `btn${(newRow * 3) + newCol + 1}`;  
+      document.getElementById(id).classList.toggle('active');  
+    }  
+  });  
+}  
+  
+function resetButtons() {  
+  // Reset all buttons to initial state  
+  document.querySelectorAll('.button').forEach(btn => {  
+    btn.classList.remove('active');  
+  });  
+  // Set the middle button to active  
+  document.getElementById('btn5').classList.add('active');  
+}  
+</script>  
+</body>  
+</html>
