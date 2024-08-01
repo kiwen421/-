@@ -1,1 +1,43 @@
-
+<!DOCTYPE html>  
+<html>  
+<head>  
+    <title>加载中</title>  
+    <style>  
+        /* 加载界面的样式 */  
+        .loader {  
+            position: fixed; /* 固定定位 */  
+            top: 0;  
+            left: 0;  
+            width: 100%;  
+            height: 100%;  
+            background-color: black; /* 黑色背景 */  
+            display: flex;  
+            justify-content: center; /* 水平居中 */  
+            align-items: center; /* 垂直居中 */  
+            color: white; /* 文字颜色 */  
+            font-size: 30px; /* 文字大小 */  
+            z-index: 9999; /* 确保加载界面位于最顶层 */  
+            animation: fadeOut 1s ease-out 0.5s forwards;  
+        }  
+        @keyframes fadeOut {  
+            from { opacity: 1; }  
+            to { opacity: 0; }  
+        }  
+        /* 初始时隐藏主内容（虽然这里没有显示主内容，但可以根据需要添加） */  
+        .container {  
+            display: none; /* 如果需要显示内容，可以在JavaScript中修改此样式 */  
+        }  
+    </style>  
+    <script>  
+        window.onload = function() {  
+            // 页面加载完成后，隐藏加载器（虽然这里通过重定向直接跳转，但如果需要可以添加隐藏加载器的代码）  
+            // 然后立即跳转到另一个页面  
+            window.location.href = 'lightblock.html';  
+        };  
+    </script>  
+</head>  
+<body>  
+    <div class="loader">加载中……</div>  
+    <!-- 这里可以添加其他内容，但考虑到您希望立即重定向，这些内容将不会被用户看到 -->  
+</body>  
+</html>
